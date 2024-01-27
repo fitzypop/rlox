@@ -2,7 +2,7 @@ use anyhow::{Context, Ok, Result};
 use std::{
     env,
     fs::File,
-    io::{stdin, stdout, BufRead, Read, StdoutLock, Write},
+    io::{stdin, BufRead, Read},
 };
 
 fn main() -> Result<()> {
@@ -15,12 +15,10 @@ fn main() -> Result<()> {
 }
 
 fn run_repl() -> Result<()> {
-    let mut stdout = stdout().lock();
     let mut stdin = stdin().lock();
 
     loop {
-        stdout.write_all(b">> ")?;
-        stdout.flush()?;
+        println!(">> ");
 
         let mut line = String::new();
         let _by = stdin.read_line(&mut line)?;
@@ -28,7 +26,7 @@ fn run_repl() -> Result<()> {
         if line_in == "exit" {
             return Ok(());
         }
-        run(line_in.to_string(), &mut stdout)?;
+        run(line_in.into())?;
     }
 }
 
@@ -37,19 +35,17 @@ fn run_file(arg: &str) -> Result<()> {
         println!("");
         return Ok(());
     }
-    let mut stdout = stdout().lock();
 
     let mut file = File::open(arg).with_context(|| format!("Could not open file {}", arg))?;
 
     let mut buf = String::new();
     file.read_to_string(&mut buf)?;
 
-    run(buf, &mut stdout)?;
+    run(buf)?;
     Ok(())
 }
 
-fn run(source: String, stdout: &mut StdoutLock<'_>) -> Result<()> {
-    stdout.write_all(source.as_bytes())?;
-    stdout.write_all(b"\n")?;
+fn run(source: String) -> Result<()> {
+    println!("{}", source);
     Ok(())
 }
