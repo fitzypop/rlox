@@ -2,7 +2,7 @@ use anyhow::{Context, Result};
 use std::{
     env,
     fs::File,
-    io::{stdin, stdout, BufRead, Read, Write},
+    io::{stdin, stdout, Read, Write},
 };
 
 fn main() -> Result<()> {
