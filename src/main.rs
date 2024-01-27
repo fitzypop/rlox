@@ -16,7 +16,7 @@ fn main() -> Result<()> {
 
 fn run_repl() -> Result<()> {
     let mut stdout = stdout();
-    let mut stdin = stdin().lock();
+    let stdin = stdin();
 
     let mut buf = String::new();
 
