@@ -2,7 +2,7 @@ use anyhow::{Context, Ok, Result};
 use std::{
     env,
     fs::File,
-    io::{stdin, BufRead, Read},
+    io::{stdin, stdout, BufRead, Read, Write},
 };
 
 fn main() -> Result<()> {
@@ -15,18 +15,23 @@ fn main() -> Result<()> {
 }
 
 fn run_repl() -> Result<()> {
+    let mut stdout = stdout();
     let mut stdin = stdin().lock();
 
-    loop {
-        println!(">> ");
+    let mut line = String::new();
 
-        let mut line = String::new();
+    loop {
+        print!(">> ");
+        stdout.flush()?;
+
         let _by = stdin.read_line(&mut line)?;
         let line_in = line.trim();
+
         if line_in == "exit" {
-            return Ok(());
+            break Ok(());
         }
         run(line_in.into())?;
+        line.clear();
     }
 }
 
