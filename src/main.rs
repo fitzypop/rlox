@@ -1,4 +1,4 @@
-use anyhow::{Context, Ok, Result};
+use anyhow::{Context, Result};
 use std::{
     env,
     fs::File,
@@ -18,20 +18,23 @@ fn run_repl() -> Result<()> {
     let mut stdout = stdout();
     let mut stdin = stdin().lock();
 
-    let mut line = String::new();
+    let mut buf = String::new();
 
     loop {
         print!(">> ");
         stdout.flush()?;
 
-        let _by = stdin.read_line(&mut line)?;
-        let line_in = line.trim();
+        let _by = stdin.read_line(&mut buf)?;
+        // TODO: should I read the bytes read?
 
-        if line_in == "exit" {
+        let line = buf.trim();
+
+        if line == "exit" {
             break Ok(());
         }
-        run(line_in.into())?;
-        line.clear();
+
+        run(line.into())?;
+        buf.clear();
     }
 }
 
@@ -51,6 +54,7 @@ fn run_file(arg: &str) -> Result<()> {
 }
 
 fn run(source: String) -> Result<()> {
+    // TODO: add tokenizer here
     println!("{}", source);
     Ok(())
 }
