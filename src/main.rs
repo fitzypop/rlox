@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use std::{
     env,
     fs::File,
@@ -40,7 +40,13 @@ fn run_repl() -> Result<()> {
 
 fn run_file(arg: &str) -> Result<()> {
     if arg == "-h" || arg == "--help" {
-        println!("");
+        println!("usage: rlox [option] ...");
+        println!("\nLox interpreter from Crafting Intpreters book, written in Rust.");
+        println!("\nOptions:");
+        println!("-h, --help\t: print this menu");
+        println!("\nArguments:");
+        println!("File\t\t: read and execute script file");
+        println!("_\t\t: run repl");
         return Ok(());
     }
 
@@ -55,6 +61,38 @@ fn run_file(arg: &str) -> Result<()> {
 
 fn run(source: String) -> Result<()> {
     // TODO: add tokenizer here
-    println!("{}", source);
+    println!("{:?}", source);
     Ok(())
 }
+
+// #[derive(Debug)]
+// enum ArgsErrors {
+//     UnknownArg { input: String },
+//     UnknownArgs { inputs: Vec<String> },
+// }
+
+// impl std::fmt::Display for ArgsErrors {
+//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+//         match self {
+//             Self::UnknownArg { input } => write!(f, "Unknown arg: {:?}", input),
+//             Self::UnknownArgs { inputs } => write!(f, "Unknown args: {:?}", inputs),
+//         }
+//     }
+// }
+
+// fn show_full_menu() -> Result<()> {
+//     Ok(())
+// }
+
+// fn show_short_menu() -> Result<()> {
+//     Ok(())
+// }
+// fn check_args(arg: Vec<&str>) -> Result<()> {
+//     return match arg {
+//         "-h" | "--help" => show_full_menu(),
+//         _ => {
+//             show_short_menu()?;
+//             Err(anyhow!(ArgsErrors::UnknownArg { input: arg.into() }))
+//         }
+//     };
+// }
